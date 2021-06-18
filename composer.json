@@ -1,0 +1,9 @@
+{
+    "name": "dmcz0/s3-test",
+    "description": "s3 available tests",
+    "type": "project",
+    "license": "mit",
+    "require": {
+        "aws/aws-sdk-php": "3.110.2"
+    }
+}
