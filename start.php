@@ -39,6 +39,7 @@ $accessSecret = getenv('ACCESS_SECRET');
 $region = getenv('ACCESS_SECRET');
 $bucket = getenv('BUCKET');
 $use_path_style_endpoint = getenv('USE_PATH_STYLE_ENDPOINT');
+$bucket_endpoint = getenv('BUCKET_ENDPOINT');
 
 
 $config = [
@@ -48,11 +49,15 @@ $config = [
         'secret' => $accessSecret,
     ],
     'version' => 'latest',
-    'region'  => $region
+    'region'  => $region,
 ];
 
 if($use_path_style_endpoint){
     $config['use_path_style_endpoint'] = true;
+}
+
+if($bucket_endpoint){
+    $config['bucket_endpoint'] = true;
 }
 
 $client = new S3Client($config);
@@ -78,4 +83,13 @@ if($action == 'upload'){
     $result = $client->getObject($option);
 
     echo BASE_PATH . DIRECTORY_SEPARATOR . 'download.jpg' . PHP_EOL;
+}else if($action == 'getUrl'){
+
+    $request = $client->createPresignedRequest($client->getCommand('GetObject', [
+        'Bucket' => $bucket,
+        'Key' => 'test.jpg',
+    ]), "+30 minutes");
+
+    echo (string)$request->getUri() . PHP_EOL;
+
 }
